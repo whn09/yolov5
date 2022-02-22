@@ -57,10 +57,13 @@ def train():
     last, best = wdir / 'last.pt', wdir / 'best.pt'
 
     # Download Dataset
-    data_dir = FILE.parents[1] / 'datasets' / data
-    if not data_dir.is_dir():
-        url = f'https://github.com/ultralytics/yolov5/releases/download/v1.0/{data}.zip'
-        download(url, dir=data_dir.parent)
+    if data in ['cifar10', 'cifar100', 'mnist', 'mnist-fashion']:
+        data_dir = FILE.parents[1] / 'datasets' / data
+        if not data_dir.is_dir():
+            url = f'https://github.com/ultralytics/yolov5/releases/download/v1.0/{data}.zip'
+            download(url, dir=data_dir.parent)
+    else:
+        data_dir = data
 
     # Transforms
     trainform = T.Compose([T.RandomGrayscale(p=0.01),
@@ -283,7 +286,7 @@ def imshow(img, labels=None, pred=None, names=None, nmax=64, verbose=False, f=Pa
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', type=str, default='yolov5s', help='initial weights path')
-    parser.add_argument('--data', type=str, default='mnist', help='cifar10, cifar100, mnist or mnist-fashion')
+    parser.add_argument('--data', type=str, default='mnist', help='cifar10, cifar100, mnist, mnist-fashion or a directory')
     parser.add_argument('--hyp', type=str, default='data/hyps/hyp.scratch.yaml', help='hyperparameters path')
     parser.add_argument('--epochs', type=int, default=20)
     parser.add_argument('--batch-size', type=int, default=128, help='total batch size for all GPUs')
