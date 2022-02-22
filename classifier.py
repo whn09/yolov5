@@ -63,7 +63,7 @@ def train():
             url = f'https://github.com/ultralytics/yolov5/releases/download/v1.0/{data}.zip'
             download(url, dir=data_dir.parent)
     else:
-        data_dir = data
+        data_dir = Path(data)
 
     # Transforms
     trainform = T.Compose([T.RandomGrayscale(p=0.01),
